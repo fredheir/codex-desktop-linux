@@ -1,0 +1,9 @@
+{
+  "id": "remote-connections",
+  "title": "Remote Connections",
+  "description": "Opt-in patch that exposes upstream Codex Remote Connections settings on Linux for local testing.",
+  "defaultEnabled": false,
+  "entrypoints": {
+    "patchDescriptors": "./patch.js"
+  }
+}
