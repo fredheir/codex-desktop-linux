@@ -1,0 +1,9 @@
+{
+  "id": "codex-mobile-remote-control",
+  "title": "Codex Mobile Remote Control",
+  "description": "Opt-in patch that exposes upstream Codex mobile remote-control setup on Linux for local testing.",
+  "defaultEnabled": false,
+  "entrypoints": {
+    "patchDescriptors": "./patch.js"
+  }
+}
