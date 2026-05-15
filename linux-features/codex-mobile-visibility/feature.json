@@ -1,0 +1,9 @@
+{
+  "id": "codex-mobile-visibility",
+  "title": "Codex Mobile Visibility",
+  "description": "Opt-in patch that exposes the upstream Codex Mobile remote-control setup gate on Linux.",
+  "defaultEnabled": false,
+  "entrypoints": {
+    "patchDescriptors": "./patch.js"
+  }
+}
