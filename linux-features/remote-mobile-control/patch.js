@@ -105,15 +105,18 @@ function applyLinuxRemoteControlDeviceKeyPatch(source) {
     .replace(DEVICE_KEY_GUARD, DEVICE_KEY_GUARD_REPLACEMENT);
 }
 
+const PRESERVE_CONFIG_PATCHED_NEEDLE =
+  /async function [A-Za-z_$][\w$]*\(\{codexHome:e,hostConfig:n,logger:r=t\.Jr\(\)\}\)\{if\(n\.kind===`local`&&process\.platform!==`linux`\)try\{/u;
+const PRESERVE_CONFIG_NEEDLE =
+  /async function ([A-Za-z_$][\w$]*)\(\{codexHome:e,hostConfig:n,logger:r=t\.Jr\(\)\}\)\{if\(n\.kind===`local`\)try\{/u;
+
 function applyLinuxRemoteControlPreserveConfigPatch(source) {
-  const patchedNeedle =
-    "async function mV({codexHome:e,hostConfig:n,logger:r=t.Jr()}){if(n.kind===`local`&&process.platform!==`linux`)try{";
-  if (source.includes(patchedNeedle)) {
+  if (PRESERVE_CONFIG_PATCHED_NEEDLE.test(source)) {
     return source;
   }
 
-  const needle = "async function mV({codexHome:e,hostConfig:n,logger:r=t.Jr()}){if(n.kind===`local`)try{";
-  if (!source.includes(needle)) {
+  const match = source.match(PRESERVE_CONFIG_NEEDLE);
+  if (match == null) {
     if (
       !source.includes("Removed remote_control from config before app-server start") &&
       !source.includes("Failed to remove remote_control before app-server start")
@@ -124,7 +127,11 @@ function applyLinuxRemoteControlPreserveConfigPatch(source) {
     return source;
   }
 
-  return source.replace(needle, patchedNeedle);
+  const fnName = match[1];
+  return source.replace(
+    match[0],
+    `async function ${fnName}({codexHome:e,hostConfig:n,logger:r=t.Jr()}){if(n.kind===\`local\`&&process.platform!==\`linux\`)try{`,
+  );
 }
 
 function applyLinuxRemoteControlVisibilityPatch(source) {

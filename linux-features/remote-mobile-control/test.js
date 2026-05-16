@@ -151,6 +151,19 @@ test("Linux remote-control device-key patch handles current minified aliases", (
   assert.equal(applyLinuxRemoteControlDeviceKeyPatch(patched), patched);
 });
 
+test("Linux remote-control preserve-config patch handles drifted minified function name", () => {
+  const source =
+    "async function vV({codexHome:e,hostConfig:n,logger:r=t.Jr()}){if(n.kind===`local`)try{await hV(i.default.join(e??t.Rr({hostConfig:n,preferWsl:t.Kr(n)}),pV))&&r.info(`Removed remote_control from config before app-server start`)}catch(e){r.warning(`Failed to remove remote_control before app-server start`,{safe:{},sensitive:{error:e}})}}";
+  const patched = applyLinuxRemoteControlPreserveConfigPatch(source);
+
+  assert.notEqual(patched, source);
+  assert.match(
+    patched,
+    /async function vV\(\{codexHome:e,hostConfig:n,logger:r=t\.Jr\(\)\}\)\{if\(n\.kind===`local`&&process\.platform!==`linux`\)try\{/,
+  );
+  assert.equal(applyLinuxRemoteControlPreserveConfigPatch(patched), patched);
+});
+
 test("Linux remote-control visibility patch allows Linux when upstream marks availability false", () => {
   const source = syntheticVisibilityBundle();
   const patched = applyLinuxRemoteControlVisibilityPatch(source);
