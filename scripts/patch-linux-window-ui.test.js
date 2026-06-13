@@ -1378,18 +1378,19 @@ test("patches current webview opaque window default bundle shapes", () => {
   const patchedAppMainRuntime = applyPatchTwice(applyLinuxOpaqueWindowsDefaultPatch, appMainRuntimeSource);
   const patchedSettings = applyPatchTwice(applyLinuxOpaqueWindowsDefaultPatch, settingsSource);
 
-  assert.match(patchedResolvedTheme, /opaqueWindows:e\?\.opaqueWindows\?\?\(typeof navigator<`u`&&/);
+  assert.match(patchedResolvedTheme, /opaqueWindows:\(typeof navigator<`u`&&/);
+  assert.doesNotMatch(patchedResolvedTheme, /opaqueWindows:e\?\.opaqueWindows\?\?\(typeof navigator<`u`&&/);
   assert.match(
     patchedRuntime,
-    /document\.documentElement\.dataset\.codexOs===`linux`&&\(\(o===`light`\?c:u\)\?\.opaqueWindows==null&&\(C=\{\.\.\.C,opaqueWindows:!0\}\)\)/,
+    /document\.documentElement\.dataset\.codexOs===`linux`&&\(C=\{\.\.\.C,opaqueWindows:!0\}\)/,
   );
   assert.match(
     patchedSettings,
-    /navigator\.userAgent\.includes\(`Linux`\)&&x\?\.opaqueWindows==null&&\(x=\{\.\.\.x,opaqueWindows:!0\}\);let S=/,
+    /navigator\.userAgent\.includes\(`Linux`\)&&\(x=\{\.\.\.x,opaqueWindows:!0\}\);let S=/,
   );
   assert.match(
     patchedAppMainRuntime,
-    /document\.documentElement\.dataset\.codexOs===`linux`&&g\.opaqueWindows==null&&\(g=\{\.\.\.g,opaqueWindows:!0\}\),\(g\.opaqueWindows\|\|i\)&&!pc\(\)/,
+    /document\.documentElement\.dataset\.codexOs===`linux`&&\(g=\{\.\.\.g,opaqueWindows:!0\}\),\(g\.opaqueWindows\|\|i\)&&!pc\(\)/,
   );
 });
 
