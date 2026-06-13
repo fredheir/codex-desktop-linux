@@ -38,20 +38,17 @@ function applyLinuxOpaqueWindowsDefaultPatch(currentSource) {
   let patchedSource = currentSource;
   let warnedMissingNeedle = false;
   const mergeDefaultPatched = () =>
-    patchedSource.includes("opaqueWindows:(typeof navigator<`u`&&");
+    patchedSource.includes("opaqueWindows:e?.opaqueWindows??(typeof navigator<`u`&&");
   const settingsDefaultPatched = () =>
-    patchedSource.includes("navigator.userAgent.includes(`Linux`)&&(d={...d,opaqueWindows:!0})") ||
-    patchedSource.includes("navigator.userAgent.includes(`Linux`)&&(x={...x,opaqueWindows:!0})") ||
-    /navigator\.userAgent\.includes\(`Linux`\)&&\([A-Za-z_$][\w$]*=\{\.\.\.[A-Za-z_$][\w$]*,opaqueWindows:!0\}\)/u.test(
-      patchedSource,
-    );
+    patchedSource.includes("navigator.userAgent.includes(`Linux`)&&r?.opaqueWindows==null") ||
+    patchedSource.includes("navigator.userAgent.includes(`Linux`)&&x?.opaqueWindows==null") ||
+    /navigator\.userAgent\.includes\(`Linux`\)&&[A-Za-z_$][\w$]*\?\.opaqueWindows==null/u.test(patchedSource);
   const runtimeDefaultPatched = () =>
-    patchedSource.includes("document.documentElement.dataset.codexOs===`linux`&&(T={...T,opaqueWindows:!0})") ||
-    patchedSource.includes("document.documentElement.dataset.codexOs===`linux`&&(g={...g,opaqueWindows:!0})") ||
+    patchedSource.includes("document.documentElement.dataset.codexOs===`linux`&&((o===`light`?l:f)?.opaqueWindows==null") ||
+    patchedSource.includes("document.documentElement.dataset.codexOs===`linux`&&((s===`light`?u:p)?.opaqueWindows==null") ||
+    patchedSource.includes("document.documentElement.dataset.codexOs===`linux`&&g.opaqueWindows==null&&(g={...g,opaqueWindows:!0})") ||
     /useState\)\(document\.documentElement\.dataset\.codexOs===`linux`\)/.test(patchedSource) ||
-    /document\.documentElement\.dataset\.codexOs===`linux`&&\([A-Za-z_$][\w$]*=\{\.\.\.[A-Za-z_$][\w$]*,opaqueWindows:!0\}\)/u.test(
-      patchedSource,
-    );
+    /document\.documentElement\.dataset\.codexOs===`linux`&&\(\([A-Za-z_$][\w$]*===`light`\?[A-Za-z_$][\w$]*:[A-Za-z_$][\w$]*\)\?\.opaqueWindows==null/u.test(patchedSource);
   const linuxDefaultPatched = () =>
     mergeDefaultPatched() || settingsDefaultPatched() || runtimeDefaultPatched();
   const warnMissingNeedle = () => {
@@ -66,7 +63,7 @@ function applyLinuxOpaqueWindowsDefaultPatch(currentSource) {
 
   const mergeNeedle = "opaqueWindows:e?.opaqueWindows??n.opaqueWindows,semanticColors:";
   const mergePatch =
-    "opaqueWindows:(typeof navigator<`u`&&((navigator.userAgentData?.platform??navigator.platform??navigator.userAgent).toLowerCase().includes(`linux`))?!0:e?.opaqueWindows??n.opaqueWindows),semanticColors:";
+    "opaqueWindows:e?.opaqueWindows??(typeof navigator<`u`&&((navigator.userAgentData?.platform??navigator.platform??navigator.userAgent).toLowerCase().includes(`linux`))?!0:n.opaqueWindows),semanticColors:";
 
   if (mergeDefaultPatched()) {
     // Already patched.
@@ -79,8 +76,8 @@ function applyLinuxOpaqueWindowsDefaultPatch(currentSource) {
   const settingsNeedle =
     "let d=ot(r,e),f=at(e),p={codeThemeId:tt(a,e).id,theme:d},";
   const settingsPatch =
-    "let d=ot(r,e);navigator.userAgent.includes(`Linux`)&&(d={...d,opaqueWindows:!0});let f=at(e),p={codeThemeId:tt(a,e).id,theme:d},";
-  if (patchedSource.includes("navigator.userAgent.includes(`Linux`)&&(d={...d,opaqueWindows:!0})")) {
+    "let d=ot(r,e);navigator.userAgent.includes(`Linux`)&&r?.opaqueWindows==null&&(d={...d,opaqueWindows:!0});let f=at(e),p={codeThemeId:tt(a,e).id,theme:d},";
+  if (patchedSource.includes("navigator.userAgent.includes(`Linux`)&&r?.opaqueWindows==null")) {
     // Already patched.
   } else if (patchedSource.includes(settingsNeedle)) {
     patchedSource = patchedSource.replace(settingsNeedle, settingsPatch);
@@ -88,8 +85,8 @@ function applyLinuxOpaqueWindowsDefaultPatch(currentSource) {
 
   const currentSettingsNeedle = "setThemePatch:b,theme:x}=ne(t),S=$t(i,t),";
   const currentSettingsPatch =
-    "setThemePatch:b,theme:x}=ne(t);navigator.userAgent.includes(`Linux`)&&(x={...x,opaqueWindows:!0});let S=$t(i,t),";
-  if (patchedSource.includes("navigator.userAgent.includes(`Linux`)&&(x={...x,opaqueWindows:!0})")) {
+    "setThemePatch:b,theme:x}=ne(t);navigator.userAgent.includes(`Linux`)&&x?.opaqueWindows==null&&(x={...x,opaqueWindows:!0});let S=$t(i,t),";
+  if (patchedSource.includes("navigator.userAgent.includes(`Linux`)&&x?.opaqueWindows==null")) {
     // Already patched.
   } else if (patchedSource.includes(currentSettingsNeedle)) {
     patchedSource = patchedSource.replace(currentSettingsNeedle, currentSettingsPatch);
@@ -97,27 +94,23 @@ function applyLinuxOpaqueWindowsDefaultPatch(currentSource) {
 
   const currentSettingsRegex =
     /setThemePatch:([A-Za-z_$][\w$]*),theme:([A-Za-z_$][\w$]*)\}=([A-Za-z_$][\w$]*)\(([A-Za-z_$][\w$]*)\),([A-Za-z_$][\w$]*)=/;
-  if (patchedSource.includes("navigator.userAgent.includes(`Linux`)&&(x={...x,opaqueWindows:!0})")) {
+  if (patchedSource.includes("navigator.userAgent.includes(`Linux`)&&x?.opaqueWindows==null")) {
     // Already patched by the current-settings branch above.
-  } else if (
-    /navigator\.userAgent\.includes\(`Linux`\)&&\([A-Za-z_$][\w$]*=\{\.\.\.[A-Za-z_$][\w$]*,opaqueWindows:!0\}\)/.test(
-      patchedSource,
-    )
-  ) {
+  } else if (/navigator\.userAgent\.includes\(`Linux`\)&&[A-Za-z_$][\w$]*\?\.opaqueWindows==null/.test(patchedSource)) {
     // Already patched with drifted minified names.
   } else if (currentSettingsRegex.test(patchedSource)) {
     patchedSource = patchedSource.replace(
       currentSettingsRegex,
       (match, setThemePatchVar, themeVar, hookVar, variantVar, nextVar) =>
-        `setThemePatch:${setThemePatchVar},theme:${themeVar}}=${hookVar}(${variantVar});navigator.userAgent.includes(\`Linux\`)&&(${themeVar}={...${themeVar},opaqueWindows:!0});let ${nextVar}=`,
+        `setThemePatch:${setThemePatchVar},theme:${themeVar}}=${hookVar}(${variantVar});navigator.userAgent.includes(\`Linux\`)&&${themeVar}?.opaqueWindows==null&&(${themeVar}={...${themeVar},opaqueWindows:!0});let ${nextVar}=`,
     );
   }
 
   const runtimeNeedle =
     "let T=o===`light`?C:w,E;if(T.opaqueWindows&&!XZ()){";
   const runtimePatch =
-    "let T=o===`light`?C:w,E;document.documentElement.dataset.codexOs===`linux`&&(T={...T,opaqueWindows:!0});if(T.opaqueWindows&&!XZ()){";
-  if (patchedSource.includes("document.documentElement.dataset.codexOs===`linux`&&(T={...T,opaqueWindows:!0})")) {
+    "let T=o===`light`?C:w,E;document.documentElement.dataset.codexOs===`linux`&&((o===`light`?l:f)?.opaqueWindows==null&&(T={...T,opaqueWindows:!0}));if(T.opaqueWindows&&!XZ()){";
+  if (patchedSource.includes("document.documentElement.dataset.codexOs===`linux`&&((o===`light`?l:f)?.opaqueWindows==null")) {
     // Already patched.
   } else if (patchedSource.includes(runtimeNeedle)) {
     patchedSource = patchedSource.replace(runtimeNeedle, runtimePatch);
@@ -125,8 +118,8 @@ function applyLinuxOpaqueWindowsDefaultPatch(currentSource) {
 
   const currentRuntimeNeedle = "let T=s===`light`?S:w,E;";
   const currentRuntimePatch =
-    "let T=s===`light`?S:w,E;document.documentElement.dataset.codexOs===`linux`&&(T={...T,opaqueWindows:!0});";
-  if (patchedSource.includes("document.documentElement.dataset.codexOs===`linux`&&(T={...T,opaqueWindows:!0})")) {
+    "let T=s===`light`?S:w,E;document.documentElement.dataset.codexOs===`linux`&&((s===`light`?u:p)?.opaqueWindows==null&&(T={...T,opaqueWindows:!0}));";
+  if (patchedSource.includes("document.documentElement.dataset.codexOs===`linux`&&((s===`light`?u:p)?.opaqueWindows==null")) {
     // Already patched.
   } else if (patchedSource.includes(currentRuntimeNeedle)) {
     patchedSource = patchedSource.replace(currentRuntimeNeedle, currentRuntimePatch);
@@ -135,8 +128,8 @@ function applyLinuxOpaqueWindowsDefaultPatch(currentSource) {
   const appMainRuntimeNeedle =
     "if((g.opaqueWindows||i)&&!pc()){e.classList.add(`electron-opaque`);return}";
   const appMainRuntimePatch =
-    "if(document.documentElement.dataset.codexOs===`linux`&&(g={...g,opaqueWindows:!0}),(g.opaqueWindows||i)&&!pc()){e.classList.add(`electron-opaque`);return}";
-  if (patchedSource.includes("document.documentElement.dataset.codexOs===`linux`&&(g={...g,opaqueWindows:!0})")) {
+    "if(document.documentElement.dataset.codexOs===`linux`&&g.opaqueWindows==null&&(g={...g,opaqueWindows:!0}),(g.opaqueWindows||i)&&!pc()){e.classList.add(`electron-opaque`);return}";
+  if (patchedSource.includes("document.documentElement.dataset.codexOs===`linux`&&g.opaqueWindows==null&&(g={...g,opaqueWindows:!0})")) {
     // Already patched.
   } else if (patchedSource.includes(appMainRuntimeNeedle)) {
     patchedSource = patchedSource.replace(appMainRuntimeNeedle, appMainRuntimePatch);
@@ -181,7 +174,7 @@ function applyLinuxOpaqueWindowsDefaultPatch(currentSource) {
       const selectorNeedle =
         `let ${selectedThemeVar}=${resolvedVariantVar}===\`light\`?${lightThemeVar}:${darkThemeVar},`;
       const selectorPatch =
-        `let ${selectedThemeVar}=${resolvedVariantVar}===\`light\`?${lightThemeVar}:${darkThemeVar};document.documentElement.dataset.codexOs===\`linux\`&&(${selectedThemeVar}={...${selectedThemeVar},opaqueWindows:!0});let `;
+        `let ${selectedThemeVar}=${resolvedVariantVar}===\`light\`?${lightThemeVar}:${darkThemeVar};document.documentElement.dataset.codexOs===\`linux\`&&((${resolvedVariantVar}===\`light\`?${lightThemeRawVar}:${darkThemeRawVar})?.opaqueWindows==null&&(${selectedThemeVar}={...${selectedThemeVar},opaqueWindows:!0}));let `;
       if (patchedSource.includes(selectorNeedle)) {
         patchedSource = patchedSource.replace(selectorNeedle, selectorPatch);
       }
