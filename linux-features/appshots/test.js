@@ -179,7 +179,16 @@ test("routes AppShots capture through the self-contained Linux feature", () => {
   );
   assert.match(patched, /function codexLinuxAppshotBackendPath/);
   assert.match(patched, /codexLinuxAppshotBackendJson\(\[`windows`\],5000\)/);
+  assert.match(patched, /function codexLinuxAppshotNiriWindow/);
+  assert.match(patched, /NIRI_SOCKET/);
+  assert.match(patched, /niri`,\[`msg`,`--json`,`focused-window`\]/);
   assert.match(patched, /codexLinuxAppshotBackendJson\(\[`state`,e\],10000\)/);
+  assert.match(patched, /codexLinuxAppshotSource:`niri`/);
+  assert.match(patched, /codexLinuxAppshotScreenshotNiri/);
+  assert.match(
+    patched,
+    /\[`msg`,`action`,`screenshot-window`,`--path`,r,`--write-to-disk`,`true`,`--show-pointer`,`false`\]/,
+  );
   assert.match(patched, /spectacle.*-b.*-n/);
   assert.match(patched, /programs:\[`spectacle`,`\/usr\/bin\/spectacle`\]/);
   assert.match(patched, /codexLinuxAppshotCropWithImageMagick/);
